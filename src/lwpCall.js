@@ -193,17 +193,21 @@ export default class {
     }
   }
 
-  mute(options = {}) {
-    options = lwpUtils.merge(options, { audio: true, video: true });
-
+  /**
+   *
+   * @param {{audio: boolean, video: boolean}} options - The channels you want to mute
+   */
+  mute(options = { audio: true, video: true }) {
     if (this.hasSession()) {
       this._getSession().mute(options);
     }
   }
 
-  unmute(options = {}) {
-    options = lwpUtils.merge(options, { audio: true, video: true });
-
+  /**
+   *
+   * @param {{audio: boolean, video: boolean}} options - The channels you want to unmute
+   */
+  unmute(options = { audio: true, video: true }) {
     if (this.hasSession()) {
       this._getSession().unmute(options);
     }
@@ -393,6 +397,8 @@ export default class {
 
   summary() {
     const direction = this.getDirection();
+    const { audio: isAudioMuted, video: isVideoMuted } = this.isMuted(true);
+
     return {
       callId: this.getId(),
       hasSession: this.hasSession(),
@@ -400,7 +406,8 @@ export default class {
       established: this.isEstablished(),
       ended: this.isEnded(),
       held: this.isOnHold(),
-      muted: this.isMuted(),
+      isAudioMuted,
+      isVideoMuted,
       primary: this.isPrimary(),
       inTransfer: this.isInTransfer(),
       direction: direction,
@@ -539,6 +546,14 @@ export default class {
       this._getSession().on("progress", (...event) => {
         this._emit("progress", this, ...event);
       });
+      this._getSession().on("connecting", () => {
+        // Mute video and audio after the local media stream is added into RTCSession
+        // TODO: get default mute values from config
+        this._getSession().mute({
+          audio: this._config.startWithAudioMuted,
+          video: this._config.startWithVideoMuted,
+        });
+      });
       this._getSession().on("confirmed", (...event) => {
         this._answerTime = new Date();
         this._emit("ringing.stopped", this);
@@ -572,7 +587,9 @@ export default class {
       });
       this._getSession().on("peerconnection", (...data) => {
         const peerConnection = data[0].peerconnection;
+
         this._emit("peerconnection", this, peerConnection);
+
         peerConnection.addEventListener("track", (...event) => {
           this._emit("peerconnection.add.track", this, ...event);
           this._updateStreams();

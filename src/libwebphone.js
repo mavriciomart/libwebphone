@@ -124,6 +124,8 @@ export default class extends EventEmitter {
       call: {
         useAudioContext: false,
         globalKeyShortcuts: true,
+        startWithAudioMuted: true,
+        startWithVideoMuted: true,
         keys: {
           spacebar: {
             enabled: true,
