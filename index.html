@@ -371,6 +371,11 @@
           },
           videoinput: {
             enabled: true,
+            mediaElement: {
+              /* create: true, */
+              /* elementId: "video-element",
+              element: "video", */
+            },
           },
           renderTargets: [
             "media_device",
@@ -400,14 +405,14 @@
         userAgent: {
           renderTargets: ["user_agent"],
           transport: {
-            sockets: ["wss://{SIP_SERVER}:5065"],
+            sockets: ["wss://sandbox.2600hz.com:5065"],
             recovery_max_interval: 30,
             recovery_min_interval: 2,
           },
           authentication: {
-            username: "{SIP_USERNAME}",
-            password: "{SIP_PASSWORD}",
-            realm: "{SIP_DOMAIN}",
+            username: "user_7TeuJN9tfw",
+            password: "yZF8yMjFffaT",
+            realm: "vbbZ65Q.sb.2600hz.com",
           },
           user_agent: {
             //contact_uri: '',
@@ -426,6 +431,7 @@
       }; //End ofConfig
 
       var webphone = new libwebphone(config);
+      window.webphone = webphone;
       webphone.on("userAgent.recieved.notify", (lwp, userAgent, data) => {
         let request = data.request;
         console.log(request.body);
@@ -458,11 +464,11 @@
     <div id="test"></div>
     <div class="container-fluid">
       <!-- User Agent-->
-      <div class="row" style="border: solid;">
-        <div class="col" style="border-right: dashed;">
+      <div class="row" style="border: solid">
+        <div class="col" style="border-right: dashed">
           <div id="user_agent"></div>
         </div>
-        <div class="col" style="border-right: dashed;">
+        <div class="col" style="border-right: dashed">
           <div>
             <button
               onclick="webphone.getUserAgent().start('user_q5eNt95vwv', 'cxNMVV2BD47J');"
@@ -516,11 +522,11 @@
       </div>
 
       <!-- Media Devices-->
-      <div class="row" style="border: solid;">
-        <div class="col" style="border-right: dashed;">
+      <div class="row" style="border: solid">
+        <div class="col" style="border-right: dashed">
           <div id="media_device"></div>
         </div>
-        <div class="col" style="border-right: dashed;">
+        <div class="col" style="border-right: dashed">
           <div id="media_device_tweaked"></div>
         </div>
         <div class="col">
@@ -628,11 +634,11 @@
       </div>
 
       <!-- Audio Mixer -->
-      <div class="row" style="border: solid;">
-        <div class="col" style="border-right: dashed;">
+      <div class="row" style="border: solid">
+        <div class="col" style="border-right: dashed">
           <div id="audio_context"></div>
         </div>
-        <div class="col" style="border-right: dashed;">
+        <div class="col" style="border-right: dashed">
           <div id="audio_context_tweaked"></div>
         </div>
         <div class="col">
@@ -676,11 +682,11 @@
       </div>
 
       <!-- Dialpad -->
-      <div class="row" style="border: solid;">
-        <div class="col" style="border-right: dashed;">
+      <div class="row" style="border: solid">
+        <div class="col" style="border-right: dashed">
           <div id="dialpad"></div>
         </div>
-        <div class="col" style="border-right: dashed;">
+        <div class="col" style="border-right: dashed">
           <div id="dialpad_custom_tweaked"></div>
         </div>
         <div class="col">
@@ -798,28 +804,30 @@
       </div>
 
       <!-- Call Control -->
-      <div class="row" style="border: solid;">
-        <div class="col" style="border-right: dashed;">
+      <div class="row" style="border: solid">
+        <div class="col" style="border-right: dashed">
           <div id="call_control"></div>
         </div>
-        <div class="col" style="border-right: dashed;"></div>
+        <div class="col" style="border-right: dashed"></div>
         <div class="col"></div>
       </div>
 
       <!-- Call List -->
-      <div class="row" style="border: solid;">
+      <div class="row" style="border: solid">
         <div class="col">
           <div id="call_list"></div>
         </div>
       </div>
 
       <!-- Video Canvas -->
-      <div class="row" style="border: solid;">
+      <div class="row" style="border: solid">
         <div class="col">
           <canvas id="video_screen" width="640" height="480"></canvas>
           <div id="video_controls"></div>
         </div>
       </div>
+
+      <video id="video-element"></video>
     </div>
   </body>
 </html>
