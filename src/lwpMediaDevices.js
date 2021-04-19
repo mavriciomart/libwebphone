@@ -106,7 +106,7 @@ export default class extends lwpRenderer {
   toggleMute(deviceKind = null) {
     switch (deviceKind) {
       case "audiooutput":
-        return this._toggleUuteOutput(deviceKind);
+        return this._toggleMuteOutput(deviceKind);
       default:
         return this._toggleMuteInput(deviceKind);
     }
@@ -792,7 +792,19 @@ export default class extends lwpRenderer {
             );
           }
         });
-      } else {
+      }
+
+      if (trackKind === "video" && preferedDevice.id === "none") {
+        // Disable video for all streams,
+        // do not replace track or media stream
+        this._startedStreams.forEach((request) => {
+          if (request.mediaStream) {
+            request.mediaStream.getVideoTracks().forEach((track) => {
+              track.enabled = false;
+            });
+          }
+        });
+
         this._availableDevices[preferedDevice.deviceKind].forEach(
           (availableDevice) => {
             if (availableDevice.id == "none") {
@@ -1073,7 +1085,6 @@ export default class extends lwpRenderer {
     const trackParameters = lwpUtils.trackParameters(mediaStream, track);
 
     track.enabled = false;
-    track.stop();
 
     mediaStream.removeTrack(track);
 

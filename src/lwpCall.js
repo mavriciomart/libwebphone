@@ -502,12 +502,8 @@ export default class {
     this._libwebphone.on(
       "mediaDevices.video.input.changed",
       (lwp, mediaDevices, newTrack) => {
-        if (this.hasSession()) {
-          if (newTrack) {
-            this.replaceSenderTrack(newTrack.track);
-          } else {
-            this.removeSenderTrack("video");
-          }
+        if (this.hasSession() && newTrack) {
+          this.replaceSenderTrack(newTrack.track);
         }
       }
     );
@@ -548,7 +544,6 @@ export default class {
       });
       this._getSession().on("connecting", () => {
         // Mute video and audio after the local media stream is added into RTCSession
-        // TODO: get default mute values from config
         this._getSession().mute({
           audio: this._config.startWithAudioMuted,
           video: this._config.startWithVideoMuted,
