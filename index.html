@@ -365,12 +365,14 @@
         callControl: {
           renderTargets: ["call_control"],
         },
+        call: { startWithAudioMuted: false },
         mediaDevices: {
           audioinput: {
             preferedDeviceIds: ["bnkZoip5H5kiNXBLV+YNGalX9r0kvfNjJsZcOkHPeQQ="],
           },
           videoinput: {
             enabled: true,
+            screenCapture: true,
             mediaElement: {
               /* create: true, */
               /* elementId: "video-element",
@@ -457,7 +459,7 @@
       webphone.on("userAgent.call.failed", (lwp, userAgent, error) => {
         window.alert(error.message);
       });
-      //webphone.onAny((event, ...data) => console.log(event, data));
+      webphone.onAny((event, ...data) => console.log(event, data));
     </script>
   </head>
   <body>

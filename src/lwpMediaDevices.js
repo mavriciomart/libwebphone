@@ -115,8 +115,9 @@ export default class extends lwpRenderer {
   /**
    * Start Screen Capture. If no source id is provided, it will prompt the user to select a target
    * @param {DisplayMediaStreamConstraints} [options] The source for screen capture.
+   * @param {boolean} [useDisplayMedia] Use mediaDevices.getDisplayMedia over mediaDevices.getUserMedia
    */
-  async startScreenCapture(options = {}) {
+  async startScreenCapture(options = {}, useDisplayMedia = true) {
     /**
      * Screen Capture acts as a new videoinput device,
      * meaning that if you switch calls when screensharing
@@ -125,9 +126,10 @@ export default class extends lwpRenderer {
 
     // TODO: Share audio as well
     try {
-      this._captureStream = await navigator.mediaDevices.getDisplayMedia(
-        options
-      );
+      this._captureStream = useDisplayMedia
+        ? await navigator.mediaDevices.getDisplayMedia(options)
+        : await navigator.mediaDevices.getUserMedia(options);
+
       this._emit("screenCapture.started", this, this._captureStream);
     } catch (error) {
       this._emit("screenCapture.error", this, error);
